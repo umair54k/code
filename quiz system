@@ -1,0 +1,32 @@
+def quiz():
+    questions = {
+        "What is the capital of France?": ["A. Berlin", "B. Madrid", "C. Paris", "D. Rome", "C"],
+        "Which planet is known as the Red Planet?": ["A. Earth", "B. Mars", "C. Jupiter", "D. Venus", "B"],
+        "What is the largest ocean on Earth?": ["A. Atlantic", "B. Indian", "C. Arctic", "D. Pacific", "D"],
+        "Who wrote 'Hamlet'?": ["A. Dickens", "B. Shakespeare", "C. Tolstoy", "D. Hemingway", "B"],
+        "What is the square root of 64?": ["A. 6", "B. 7", "C. 8", "D. 9", "C"],
+        "What is the chemical symbol for water?": ["A. O2", "B. CO2", "C. H2O", "D. NaCl", "C"],
+        "Which gas do plants absorb from the atmosphere?": ["A. Oxygen", "B. Nitrogen", "C. Carbon Dioxide", "D. Hydrogen", "C"],
+        "Who developed the theory of relativity?": ["A. Newton", "B. Einstein", "C. Tesla", "D. Galileo", "B"],
+        "What is the currency of Japan?": ["A. Yen", "B. Dollar", "C. Peso", "D. Euro", "A"],
+        "What is the hardest natural substance on Earth?": ["A. Gold", "B. Iron", "C. Diamond", "D. Platinum", "C"]
+    }
+    
+    score = 0
+    
+    for question, options in questions.items():
+        print(question)
+        for option in options[:-1]:
+            print(option)
+        user_answer = input("Enter your choice (A/B/C/D): ").strip().upper()
+        if user_answer == options[-1]:
+            print("Correct!")
+            score += 1
+        else:
+            print(f"Wrong! The correct answer is {options[-1]}.")
+        print()
+    
+    print(f"Your final score is {score}/{len(questions)}")
+
+if __name__ == "__main__":
+    quiz()
