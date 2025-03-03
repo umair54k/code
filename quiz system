@@ -9,7 +9,8 @@ def quiz():
         "Which gas do plants absorb from the atmosphere?": ["A. Oxygen", "B. Nitrogen", "C. Carbon Dioxide", "D. Hydrogen", "C"],
         "Who developed the theory of relativity?": ["A. Newton", "B. Einstein", "C. Tesla", "D. Galileo", "B"],
         "What is the currency of Japan?": ["A. Yen", "B. Dollar", "C. Peso", "D. Euro", "A"],
-        "What is the hardest natural substance on Earth?": ["A. Gold", "B. Iron", "C. Diamond", "D. Platinum", "C"]
+        "What is the hardest natural substance on Earth?": ["A. Gold", "B. Iron", "C. Diamond", "D. Platinum", "C"],
+        "what is the chemical symbol of oxygen?": ["A.co2", "B. H2", "c. o", "D. b2", "C"]
     }
     
     score = 0
