@@ -1,0 +1,27 @@
+students = []
+
+while True:
+    print("\n1. Add Student")
+    print("2. View Students")
+    print("3. Exit")
+
+    choice = input("Enter your choice: ")
+
+    if choice == "1":
+        name = input("Enter student name: ")
+        grade = input("Enter student grade: ")
+        age = input("Enter student age: ")
+        students.append({"name": name, "grade": grade, "age":age,})
+        print("Student added successfully!")
+    
+    elif choice == "2":
+        print("\nList of Students:")
+        for index, student in enumerate(students, start=1):
+            print(f"{index}. {student['name']} - Grade {student['grade']} {student['age']}")
+    
+    elif choice == "3":
+        print("Exiting program...")
+        break
+    
+    else:
+        print("Invalid choice! Please enter 1, 2, or 3.")
