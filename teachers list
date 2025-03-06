@@ -1,0 +1,29 @@
+class Teacher:
+    def __init__(self, name, age, post, salary):
+        self.name = name
+        self.age = age
+        self.post = post
+        self.salary = salary
+
+    def display_info(self):
+        print(f"Name: {self.name}")
+        print(f"Age: {self.age}")
+        print(f"Post: {self.post}")
+        print(f"Salary: ${self.salary}")
+
+# Creating a list of teacher records
+teachers = []
+
+# Taking input from the user
+n = int(input("Enter the number of teachers: "))
+for _ in range(n):
+    name = input("Enter name: ")
+    age = int(input("Enter age: "))
+    post = input("Enter post: ")
+    salary = float(input("Enter salary: "))
+    teachers.append(Teacher(name, age, post, salary))
+
+# Displaying all teacher details
+for teacher in teachers:
+    print("\nTeacher Details:")
+    teacher.display_info()
