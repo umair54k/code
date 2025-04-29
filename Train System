@@ -1,0 +1,148 @@
+class Train:
+    def __init__(self, train_no, train_name, start_station, end_station, departure_time, arrival_time, total_seats):
+        self.train_no = train_no
+        self.train_name = train_name
+        self.start_station = start_station
+        self.end_station = end_station
+        self.departure_time = departure_time
+        self.arrival_time = arrival_time
+        self.total_seats = total_seats
+        self.booked_seats = {}
+
+    def display_info(self):
+        available_seats = self.total_seats - len(self.booked_seats)
+        print(f"Train No: {self.train_no}, Name: {self.train_name}, From: {self.start_station} To: {self.end_station}")
+        print(f"Departure: {self.departure_time}, Arrival: {self.arrival_time}, Seats Available: {available_seats}\n")
+
+    def book_seat(self, passenger_name):
+        if len(self.booked_seats) < self.total_seats:
+            seat_no = len(self.booked_seats) + 1
+            self.booked_seats[seat_no] = {'name': passenger_name, 'status': 'Booked'}
+            print(f"Seat {seat_no} booked successfully for {passenger_name}.")
+        else:
+            print("Sorry, no seats available!")
+
+    def cancel_ticket(self, passenger_name):
+        found = False
+        for seat_no, info in self.booked_seats.items():
+            if info['name'] == passenger_name and info['status'] == 'Booked':
+                info['status'] = 'Cancelled'
+                found = True
+                print(f"Ticket for {passenger_name} (Seat {seat_no}) has been cancelled.")
+                break
+        if not found:
+            print("Booking not found or already cancelled.")
+
+    def view_bookings(self):
+        print(f"\nBookings for {self.train_name}:")
+        if not self.booked_seats:
+            print("No bookings yet.")
+        else:
+            for seat_no, info in self.booked_seats.items():
+                print(f"Seat {seat_no}: {info['name']} - {info['status']}")
+
+
+class RailwaySystem:
+    def __init__(self):
+        self.trains = {}
+
+    def add_train(self, train_no, train_name, start_station, end_station, departure_time, arrival_time, total_seats):
+        if train_no not in self.trains:
+            self.trains[train_no] = Train(train_no, train_name, start_station, end_station, departure_time, arrival_time, total_seats)
+            print(f"Train {train_name} added successfully!")
+        else:
+            print("Train number already exists.")
+
+    def display_trains(self):
+        print("\n--- Available Trains ---")
+        if not self.trains:
+            print("No trains available.")
+        for train in self.trains.values():
+            train.display_info()
+
+    def book_ticket(self, train_no, passenger_name):
+        if train_no in self.trains:
+            self.trains[train_no].book_seat(passenger_name)
+        else:
+            print("Train not found.")
+
+    def cancel_ticket(self, train_no, passenger_name):
+        if train_no in self.trains:
+            self.trains[train_no].cancel_ticket(passenger_name)
+        else:
+            print("Train not found.")
+
+    def view_train_bookings(self, train_no):
+        if train_no in self.trains:
+            self.trains[train_no].view_bookings()
+        else:
+            print("Train not found.")
+
+    def search_trains_by_station(self, station_name):
+        print(f"\n--- Trains passing through {station_name} ---")
+        found = False
+        for train in self.trains.values():
+            if station_name.lower() in (train.start_station.lower(), train.end_station.lower()):
+                train.display_info()
+                found = True
+        if not found:
+            print("No trains found for this station.")
+
+
+def main():
+    system = RailwaySystem()
+
+    while True:
+        print("\n--- Railway Management System ---")
+        print("1. Add Train")
+        print("2. View Trains")
+        print("3. Book Ticket")
+        print("4. Cancel Ticket")
+        print("5. View Bookings")
+        print("6. Search Train by Station")
+        print("7. Exit")
+
+        choice = input("Enter your choice (1-7): ")
+
+        if choice == '1':
+            train_no = input("Enter train number: ")
+            train_name = input("Enter train name: ")
+            start_station = input("Enter start station: ")
+            end_station = input("Enter end station: ")
+            departure_time = input("Enter departure time: ")
+            arrival_time = input("Enter arrival time: ")
+            total_seats = int(input("Enter total seats: "))
+            system.add_train(train_no, train_name, start_station, end_station, departure_time, arrival_time, total_seats)
+
+        elif choice == '2':
+            system.display_trains()
+
+        elif choice == '3':
+            train_no = input("Enter train number to book ticket: ")
+            passenger_name = input("Enter passenger name: ")
+            system.book_ticket(train_no, passenger_name)
+
+        elif choice == '4':
+            train_no = input("Enter train number to cancel ticket: ")
+            passenger_name = input("Enter passenger name to cancel: ")
+            system.cancel_ticket(train_no, passenger_name)
+
+        elif choice == '5':
+            train_no = input("Enter train number to view bookings: ")
+            system.view_train_bookings(train_no)
+
+        elif choice == '6':
+            station_name = input("Enter station name to search trains: ")
+            system.search_trains_by_station(station_name)
+
+        elif choice == '7':
+            print("Thank you for using Railway Management System. Goodbye!")
+            break
+
+        else:
+            print("Invalid choice. Please try again.")
+
+
+if __name__ == "__main__":
+    main()
+
