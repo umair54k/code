@@ -1,0 +1,158 @@
+class Flight:
+    def __init__(self, flight_no, airline, from_airport, to_airport, departure_time, arrival_time, total_seats):
+        self.flight_no = flight_no
+        self.airline = airline
+        self.from_airport = from_airport
+        self.to_airport = to_airport
+        self.departure_time = departure_time
+        self.arrival_time = arrival_time
+        self.total_seats = total_seats
+        self.booked_seats = {}  # seat_no: {name, status}
+
+    def display_info(self):
+        available = self.total_seats - len([s for s in self.booked_seats.values() if s['status'] == 'Booked'])
+        print(f"\nFlight {self.flight_no} - {self.airline}")
+        print(f"From: {self.from_airport} To: {self.to_airport}")
+        print(f"Departure: {self.departure_time} Arrival: {self.arrival_time}")
+        print(f"Seats Available: {available}/{self.total_seats}")
+
+    def book_seat(self, passenger_name):
+        # Check if already booked
+        for info in self.booked_seats.values():
+            if info['name'] == passenger_name and info['status'] == 'Booked':
+                print(f"{passenger_name} already has a booking.")
+                return
+
+        # Reuse cancelled seat
+        for seat_no, info in self.booked_seats.items():
+            if info['status'] == 'Cancelled':
+                self.booked_seats[seat_no] = {'name': passenger_name, 'status': 'Booked'}
+                print(f"Seat {seat_no} rebooked for {passenger_name}.")
+                return
+
+        if len(self.booked_seats) < self.total_seats:
+            seat_no = len(self.booked_seats) + 1
+            self.booked_seats[seat_no] = {'name': passenger_name, 'status': 'Booked'}
+            print(f"Seat {seat_no} booked for {passenger_name}.")
+        else:
+            print("No seats available.")
+
+    def cancel_ticket(self, passenger_name):
+        for seat_no, info in self.booked_seats.items():
+            if info['name'] == passenger_name and info['status'] == 'Booked':
+                self.booked_seats[seat_no]['status'] = 'Cancelled'
+                print(f"Ticket for {passenger_name} cancelled.")
+                return
+        print("Booking not found or already cancelled.")
+
+    def view_bookings(self):
+        print(f"\nBookings for Flight {self.flight_no} - {self.airline}")
+        if not self.booked_seats:
+            print("No bookings yet.")
+        for seat_no, info in self.booked_seats.items():
+            print(f"Seat {seat_no}: {info['name']} - {info['status']}")
+
+
+class AirportSystem:
+    def __init__(self):
+        self.flights = {}
+
+    def add_flight(self, flight_no, airline, from_airport, to_airport, departure_time, arrival_time, total_seats):
+        if flight_no in self.flights:
+            print("Flight number already exists.")
+        else:
+            self.flights[flight_no] = Flight(flight_no, airline, from_airport, to_airport, departure_time, arrival_time, total_seats)
+            print("Flight added successfully!")
+
+    def display_flights(self):
+        print("\n--- Available Flights ---")
+        if not self.flights:
+            print("No flights available.")
+        for flight in self.flights.values():
+            flight.display_info()
+
+    def book_ticket(self, flight_no, passenger_name):
+        if flight_no in self.flights:
+            self.flights[flight_no].book_seat(passenger_name)
+        else:
+            print("Flight not found.")
+
+    def cancel_ticket(self, flight_no, passenger_name):
+        if flight_no in self.flights:
+            self.flights[flight_no].cancel_ticket(passenger_name)
+        else:
+            print("Flight not found.")
+
+    def view_bookings(self, flight_no):
+        if flight_no in self.flights:
+            self.flights[flight_no].view_bookings()
+        else:
+            print("Flight not found.")
+
+    def search_flights_by_airport(self, airport_name):
+        print(f"\nFlights through airport: {airport_name}")
+        found = False
+        for flight in self.flights.values():
+            if airport_name.lower() in (flight.from_airport.lower(), flight.to_airport.lower()):
+                flight.display_info()
+                found = True
+        if not found:
+            print("No flights found.")
+
+
+def main():
+    system = AirportSystem()
+
+    while True:
+        print("\n--- Airport Management System ---")
+        print("1. Add Flight")
+        print("2. View Flights")
+        print("3. Book Ticket")
+        print("4. Cancel Ticket")
+        print("5. View Bookings")
+        print("6. Search Flights by Airport")
+        print("7. Exit")
+
+        choice = input("Enter your choice (1-7): ")
+
+        if choice == '1':
+            flight_no = input("Enter flight number: ")
+            airline = input("Enter airline name: ")
+            from_airport = input("From airport: ")
+            to_airport = input("To airport: ")
+            departure_time = input("Departure time (e.g., 10:00 AM): ")
+            arrival_time = input("Arrival time (e.g., 1:00 PM): ")
+            total_seats = int(input("Total seats: "))
+            system.add_flight(flight_no, airline, from_airport, to_airport, departure_time, arrival_time, total_seats)
+
+        elif choice == '2':
+            system.display_flights()
+
+        elif choice == '3':
+            flight_no = input("Flight number to book: ")
+            passenger_name = input("Passenger name: ")
+            system.book_ticket(flight_no, passenger_name)
+
+        elif choice == '4':
+            flight_no = input("Flight number to cancel: ")
+            passenger_name = input("Passenger name to cancel: ")
+            system.cancel_ticket(flight_no, passenger_name)
+
+        elif choice == '5':
+            flight_no = input("Flight number to view bookings: ")
+            system.view_bookings(flight_no)
+
+        elif choice == '6':
+            airport_name = input("Enter airport name to search: ")
+            system.search_flights_by_airport(airport_name)
+
+        elif choice == '7':
+            print("Exiting Airport Management System. Goodbye!")
+            break
+
+        else:
+            print("Invalid choice. Please try again.")
+
+
+if __name__ == "__main__":
+    main()
